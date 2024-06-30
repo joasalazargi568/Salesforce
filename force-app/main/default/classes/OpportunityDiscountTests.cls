@@ -1,0 +1,38 @@
+@IsTest
+public class OpportunityDiscountTests {
+    @IsTest
+    static void testPositiveStubbingLowPriority(){
+        // GIVEN
+        AccountWrapper mockAccountWrapper = (AccountWrapper) Test.createStub(AccountWrapper.class, new AccountWrapperMock());
+        OpportunityDiscount oppDiscount = new OpportunityDiscount(mockAccountWrapper);
+
+        // WHEN
+        Test.startTest();
+            Decimal result = oppDiscount.getTotalDiscount();
+        Test.stopTest();
+
+        // THEN
+        Assert.areEqual(.1, result, 'Expected to get .1');
+    }
+
+    @IsTest
+    static void testPostiveStubbingHighPriority(){
+        // GIVEN
+        AccountWrapperMock.isHighPriorityReturn = true;
+        AccountWrapper mockAccountWrapper = (AccountWrapper) Test.createStub(
+            AccountWrapper.class,
+            new AccountWrapperMock()
+        );
+
+        OpportunityDiscount oppDiscount = new OpportunityDiscount(mockAccountWrapper);
+
+        // WHEN
+        Test.startTest();
+            Decimal result = oppDiscount.getTotalDiscount();
+        Test.stopTest();
+
+        // THEN
+        Assert.areEqual(.25, result, 'Expected to get .25');
+
+    }
+}
